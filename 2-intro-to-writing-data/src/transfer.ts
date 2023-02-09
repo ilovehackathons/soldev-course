@@ -5,7 +5,7 @@ import Dotenv from "dotenv";
 // import { readFileSync } from "node:fs";
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-// import chalk from "chalk";
+import chalk from "chalk";
 
 Dotenv.config();
 
@@ -35,34 +35,27 @@ async function main() {
 
   if (choice === "") {
     account = web3.Keypair.generate();
-    console.log(
-      // chalk.green(
-      `\nCreated a new account.\n\nSender: ${account.publicKey.toString()}`
-      // )
-    );
+    console.log(chalk.green("\nCreated a new account."));
+    console.log(`\nSender: ${account.publicKey.toString()}`);
   } else if (
     (account = accounts.find((a) => a.publicKey.toString() === choice))
   ) {
     console.log(`\nSender: ${account.publicKey.toString()}`);
   } else {
-    console.log(
-      // chalk.red(
-      `\nUnknown account: ${choice}. Exiting.`
-      // )
-    );
+    console.log(chalk.red(`\nUnknown account: ${choice}. Exiting.`));
     process.exit(1);
   }
 
   const recipientInput = await rl.question("\nRecipient?\n\n> ");
 
   if (/^\s*$/.test(recipientInput)) {
-    console.error("Recipient is required. Exiting.");
+    console.error(chalk.red("\nRecipient is required. Exiting."));
     process.exit(1);
   }
 
   const amount = +(await rl.question("\nAmount (in SOL)?\n\n> "));
   if (!(amount >= 0)) {
-    console.error(`\nInvalid amount: ${amount}. Exiting.`);
+    console.error(chalk.red(`\nInvalid amount: ${amount}. Exiting.`));
     process.exit(1);
   }
 
@@ -88,11 +81,11 @@ async function main() {
         `\nSent ${amount} SOL from ${account.publicKey.toString()} to ${recipient.toString()}. See https://explorer.solana.com/tx/${signature}?cluster=devnet`
       );
     } catch (e) {
-      console.error(`\n${e} Exiting.`);
+      console.error(chalk.red(`\n${e} Exiting.`));
       process.exit(1);
     }
   } catch {
-    console.error("\nInvalid recipient. Exiting.");
+    console.error(chalk.red("\nInvalid recipient. Exiting."));
     process.exit(1);
   }
 }
