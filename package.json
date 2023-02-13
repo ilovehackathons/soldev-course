@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@solana/wallet-adapter-react": "^0.15.28",
+    "@solana/wallet-adapter-react-ui": "^0.9.27"
+  }
+}
